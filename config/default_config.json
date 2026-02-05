@@ -1,0 +1,15 @@
+{
+  "notebooklm": {
+    "timeout": 60,
+    "headless": true,
+    "profile_dir": "~/.config/notebooklm-py"
+  },
+  "mcp": {
+    "transport": "stdio",
+    "log_level": "info"
+  },
+  "cache": {
+    "enabled": true,
+    "ttl": 300
+  }
+}

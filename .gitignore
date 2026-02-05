@@ -1,0 +1,78 @@
+# ===== MCP NotebookLM .gitignore =====
+
+# ----- Python -----
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ----- Virtual Environments -----
+venv/
+.venv/
+env/
+.env/
+ENV/
+
+# ----- IDE & Editor -----
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# ----- Testing -----
+.pytest_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+.hypothesis/
+*.cover
+*.py,cover
+nosetests.xml
+coverage.xml
+*.log
+
+# ----- Local Data & Cache -----
+data/
+logs/
+*.cache
+*.json.bak
+
+# ----- Internal Documentation (Dev Only) -----
+docs/internal/
+
+# ----- Playwright & Browser Data -----
+playwright-report/
+playwright/.cache/
+*.pw.zip
+
+# ----- OS Files -----
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ----- Temporary Files -----
+*.tmp
+*.temp
+*.bak
