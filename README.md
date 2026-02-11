@@ -1,41 +1,46 @@
+# ... (README content as read previously) ...
 # MCP NotebookLM
 
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![MCP Protocol](https://img.shields.io/badge/MCP-FastMCP_v2-green.svg)](https://github.com/jlowin/fastmcp)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+MCP server for Google NotebookLM with automatic notebook discovery, based on the `notebooklm-py` library.
 
-A powerful MCP (Model Context Protocol) server for **Google NotebookLM** with **automatic notebook discovery**, **multi-profile management**, and **50+ tools** for content generation.
+## 🚀 Features
 
-## ✨ Features
-
-- 🔍 **Automatic notebook discovery** - List all your notebooks without manual URLs
-- 👥 **Multi-profile support** - Manage multiple Google accounts with isolated profiles
-- 🔎 **Unified search** - Search notebooks across ALL profiles simultaneously
-- 💬 **Chat with citations** - Ask questions and get answers with source citations
-- 📦 **Source management** - Add URLs, files, Google Drive documents
-- 🎨 **Content generation** - Podcasts, videos, quizzes, flashcards, slides, and more
-- 🔗 **Sharing & collaboration** - Manage access, invite users, generate public links
-- 📝 **Notes management** - Full CRUD operations for notebook notes
+- ✅ **Automatic notebook discovery** - List all your notebooks without manual URLs
+- ✅ **Chat with citations** - Ask questions and get answers with source citations  
+- ✅ **Source management** - Add URLs, files, Google Drive documents
+- ✅ **Content generation** - Generate podcasts, videos, quizzes, flashcards
+- ✅ **Playwright integration** - Uses existing Playwright installation from Oracle ecosystem
 
 ## 📋 Requirements
 
 - Python 3.11+
-- Playwright browsers installed
+- `PLAYWRIGHT_BROWSERS_PATH` environment variable set
 - Google account with NotebookLM access
 
 ## 🛠️ Installation
 
+### 1. Clone and setup
+
 ```bash
-git clone https://github.com/Tatine13/mcp-notebooklm.git
-cd mcp-notebooklm
-python -m venv .venv
-source .venv/bin/activate
-pip install -e .
-playwright install chromium
-notebooklm login
+cd /home/fkomp/Bureau/oracle/tools/mcp-NotebookLLM
+./scripts/install.sh
 ```
 
-## ⚙️ Configuration
+### 2. Ensure environment variables are set
+
+Add to your `~/.bashrc`:
+
+```bash
+export PLAYWRIGHT_BROWSERS_PATH="/mnt/windows/App_Wubuntu/playraightNav/ms-playwright"
+```
+
+### 3. Authenticate with NotebookLM
+
+```bash
+/mnt/windows/App_Wubuntu/python_envs/mcp-notebooklm/bin/notebooklm login
+```
+
+### 4. Configure MCP client
 
 Add to your MCP client configuration:
 
@@ -43,66 +48,125 @@ Add to your MCP client configuration:
 {
   "mcpServers": {
     "notebooklm": {
-      "command": "python",
-      "args": ["-m", "mcp_notebooklm"],
-      "env": {
-        "PLAYWRIGHT_BROWSERS_PATH": "<path-to-playwright-browsers>"
-      }
+      "command": "/mnt/windows/App_Wubuntu/python_envs/mcp-notebooklm/bin/python",
+      "args": ["-m", "mcp_notebooklm"]
     }
   }
 }
 ```
 
-## 📝 Available Tools (50 Total)
+## 📝 Usage
+
+Once configured, you can use these tools in your MCP client:
 
 ### Authentication & Multi-Profile 🔐
-- `setup_auth`, `confirm_auth`, `check_auth`
-- `create_profile`, `switch_profile`, `list_profiles`, `get_current_profile`, `delete_profile`, `update_profile`
+- `setup_auth` - Set up authentication
+- `check_auth` - Check authentication status
+- `create_profile` - Create a new isolated profile
+- `switch_profile` - Switch active profile
+- `list_profiles` - List all profiles
+- `get_current_profile` - Get current profile info
+- `delete_profile` - Delete a profile
+- `update_profile` - Update profile metadata
 
 ### Notebook Management
-- `list_notebooks`, `list_all_notebooks` 🌍, `search_notebooks` 🔍
-- `select_notebook`, `create_notebook`, `rename_notebook`, `delete_notebook`
-- `export_notebook`, `get_notebook_info`, `get_current_notebook`
+- `list_notebooks` - List notebooks in current profile
+- `list_all_notebooks` - **List all notebooks across ALL profiles** 🌍
+- `search_notebooks` - **Search notebooks across ALL profiles** 🔍
+- `select_notebook` - Select a notebook to work with
+- `create_notebook` - Create a new notebook
+- `rename_notebook` - Rename a notebook (New)
+- `delete_notebook` - Delete a notebook (New)
+- `export_notebook` - Export notebook metadata and sources (New)
+- `get_notebook_info` - Get detailed notebook information
+- `get_current_notebook` - Get the currently selected notebook
 
 ### Source Management
-- `list_notebook_sources`, `add_url_source`, `add_file_source`, `batch_add_sources`
-- `refresh_source`, `rename_source`, `remove_source`, `download_all_sources`
-- `get_source_guide`, `get_source_content`, `check_source_freshness`, `list_drive_sources`
+- `list_notebook_sources` - List all sources in a notebook
+- `add_url_source` - Add a URL source (website, YouTube)
+- `add_file_source` - Add a file source (PDF, text)
+- `refresh_source` - Refresh a source
+- `rename_source` - Rename a source
+- `delete_source` - Delete a source permanently
+- `download_all_sources` - Download text content of all sources
+- `get_source_guide` - Get AI-generated summary & keywords for a source 🆕
+- `get_source_content` - Get full indexed text content of a source 🆕
+- `check_source_freshness` - Check if a source needs refresh 🆕
+- `list_drive_sources` - List Drive sources with freshness status 🆕
 
 ### Research & Discovery 🕵️
-- `research_topic` 🌟 - Deep/Fast Research (Web OR Drive) with Auto-Import
-- `import_research_sources`
+- `research_topic` - **Deep/Fast Research (Web OR Drive) with Auto-Import** 🌟
+- `import_research_sources` - Import specific sources from research
 
 ### Chat & Q&A
 - `ask_question` - Ask questions with citations
-- `get_conversation_history`
+- `get_conversation_history` - Get chat history
+- `clear_conversation` - Clear chat history
 
 ### Content Generation
-- `create_audio_overview`, `create_video_overview`, `create_quiz`, `create_flashcards`
-- `generate_slides`, `generate_infographic`, `generate_mind_map`, `generate_study_guide`
-- `generate_report`, `create_data_table`, `download_generated_content`
+- `create_audio_overview` - Generate a podcast (audio overview)
+- `create_video_overview` - Generate a video
+- `create_quiz` - Generate a quiz
+- `create_flashcards` - Generate flashcards
+- `generate_slides` - Generate a presentation slide deck
+- `generate_infographic` - Generate an infographic
+- `generate_mind_map` - Generate a mind map
+- `generate_study_guide` - Generate a study guide
+- `generate_report` - Generate a detailed report with instructions
+- `create_data_table` - Generate a data table 🆕
+- `download_generated_content` - Download generated content
 
-### Sharing & Collaboration
-- `get_share_status`, `set_public_sharing`, `share_with_user`, `remove_share`
+### Sharing & Collaboration 🆕
+- `get_share_status` - Get current sharing settings & collaborators
+- `set_public_sharing` - Enable/disable public link access
+- `share_with_user` - Share notebook with a user by email
+- `remove_share` - Remove a user's access to the notebook
 
-### Notes Management
-- `manage_note` - CRUD operations (list, create, get, update, delete)
+### Notes Management 🆕
+- `manage_note` - CRUD operations for notes (list, create, get, update, delete)
 
-## 🚀 Quick Start
+**Total: 50 tools available!**
+
+
+
+## 🏗️ Architecture
+
+- **Environment**: Decentralized Python virtual environment in `/mnt/windows/App_Wubuntu/python_envs/`
+- **Playwright**: Uses existing Oracle ecosystem Playwright installation
+- **Library**: Built on `notebooklm-py` by teng-lin (unofficial Python API)
+- **MCP Framework**: FastMCP v2
+
+## 📁 Project Structure
 
 ```
-"List my notebooks"
-"Use the AI Research notebook"
-"What are the key findings?"
-"Create a podcast about this notebook"
-"Switch to my work profile"
+mcp-NotebookLLM/
+├── src/mcp_notebooklm/     # Main package
+├── config/                 # Configuration files
+├── scripts/                # Installation scripts
+├── tests/                  # Test suite
+└── logs/                   # Log files
+```
+
+## ⚠️ Important Notes
+
+- **Playwright browsers path** must be set before running the server
+- **Authentication** is persistent via Chrome profile
+- **No share links required** - notebooks are discovered automatically
+- **Oracle ecosystem compatible** - respects existing Playwright configuration
+
+## 🔧 Development
+
+```bash
+# Activate environment
+source /mnt/windows/App_Wubuntu/python_envs/mcp-notebooklm/bin/activate
+
+# Install in editable mode
+pip install -e /home/fkomp/Bureau/oracle/tools/mcp-NotebookLLM
+
+# Run tests
+pytest tests/
 ```
 
 ## 📄 License
 
-MIT License - See [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- [notebooklm-py](https://github.com/teng-lin/notebooklm-py) by teng-lin
-- [FastMCP](https://github.com/jlowin/fastmcp) by jlowin
+MIT License - See LICENSE file for details.
