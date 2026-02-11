@@ -1,85 +1,139 @@
-# Installation & Configuration
+# 📦 Installation & Deep Configuration Guide
 
-## 🚀 Quick Start
+This guide covers the deployment of the **MCP NotebookLM** server, with a focus on **Authentication** and **Multi-Profile Management**.
 
-### 1. Prerequisite: Python Environment
+---
 
-Ensure you have a Python 3.11+ environment with the package installed.
+## 📋 Prerequisites
 
+1.  **Python 3.11+**: Essential for the specific async features used.
+2.  **Google Account**: To access NotebookLM.
+3.  **Browsers**: This project uses **Playwright** (Chromium) to automate Google interactions.
+
+---
+
+## 🛠️ Step-by-Step Installation
+
+### 1. Clone & Install
 ```bash
-# Verify installation
-python -m mcp_notebooklm
+git clone https://github.com/Tatine13/mcp-notebooklm.git
+cd mcp-notebooklm
+
+# Create virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Install dependencies (Editable mode)
+pip install -e .
 ```
 
-### 2. Configure Your Client (Claude Code / Gemini CLI)
+### 2. Browser Setup (Critical)
+The server needs a browser to log in.
+- **Option A (Recommended)**: Use system-installed Playwright browsers.
+  ```bash
+  export PLAYWRIGHT_BROWSERS_PATH="/path/to/ms-playwright"
+  ```
+- **Option B**: Let Playwright manage them.
+  ```bash
+  playwright install chromium
+  ```
 
-Add this entry to your MCP `settings.json`.
+---
 
+## 🔐 Authentication : The Complete Manual
+
+Authentication is the most critical part. We use a **Headless-First** approach with **Interactive Fallback**.
+
+### Procedure for HUMANS (Initial Setup)
+You cannot log in headlessly the first time due to Google's rigorous checks (2FA, CAPTCHA).
+
+1.  **Stop any running MCP server**.
+2.  **Run the Login Command**:
+    ```bash
+    # Inside your venv
+    notebooklm login
+    ```
+3.  **Interact**:
+    - A Chrome window will open.
+    - Log in to your Google Account.
+    - Wait for the NotebookLM homepage to load.
+    - Close the window.
+4.  **Verification**:
+    - A `storage_state.json` file is created in `~/.mcp-notebooklm/profiles/default/`.
+    - This token is valid for ~30 days.
+
+### Procedure for AI / Headless Usage
+Once the `storage_state.json` exists:
+- The AI (Claude/Gemini) connects to the MCP server.
+- The server loads the JSON token.
+- **No browser window appears** (Headless mode is default).
+- If the token expires, the AI tools (`list_notebooks`, etc.) will return an error requesting a re-login.
+
+---
+
+## 👤 Multi-Profile Management (Advanced)
+
+This MCP server supports multiple isolated Google accounts seamlessly.
+
+### How it works
+Each profile is a separate directory in `~/.mcp-notebooklm/profiles/<profile_name>/`. It contains its own:
+- `storage_state.json` (Auth cookies)
+- `cookies.json`
+- Local cache
+
+### creating a New Profile
+To add a second account (e.g., "Work"):
+
+1.  **AI Command**:
+    > "Create a new profile named 'work'"
+    *(Tool: `create_profile(name='work')`)*
+
+2.  **Switch Context**:
+    > "Switch to profile 'work'"
+    *(Tool: `switch_profile(name='work')`)*
+
+3.  **Authenticate**:
+    The strictly isolated 'work' profile has no tokens yet.
+    - **Trigger**: Run `setup_auth(headless=False)`.
+    - **Action**: Opens a *new, clean* browser instance.
+    - **Input**: Log in with your Work Google Account.
+
+### Managing Profiles
+- **List**: `list_profiles()` shows all available environments.
+- **Current**: `get_current_profile()` tells you where you are.
+- **Isolation**: Work performed in 'work' (notebook creation, sources) is invisible to 'default' and vice-versa.
+
+---
+
+## ⚙️ Configuration for MCP Clients
+
+### Claude Desktop / Code
 ```json
 {
   "mcpServers": {
     "notebooklm": {
-      "command": "/path/to/your/venv/bin/python",
-      "args": [
-        "-m",
-        "mcp_notebooklm"
-      ],
+      "command": "/absolute/path/to/venv/bin/python",
+      "args": ["-m", "mcp_notebooklm"],
       "env": {
-        "PLAYWRIGHT_BROWSERS_PATH": "/path/to/playwright/browsers"
+        "PLAYWRIGHT_BROWSERS_PATH": "/path/to/browsers",
+        "NOTEBOOKLM_HEADLESS": "true"
       }
     }
   }
 }
 ```
 
-> **Note**: `PLAYWRIGHT_BROWSERS_PATH` is optional if Playwright is installed globally or in standard locations.
-
-### 3. NotebookLM Authentication
-
-The first time run requires a one-time Google login:
-
-```bash
-# Activate your virtual environment
-source .venv/bin/activate
-
-# Launch interactive login
-notebooklm login
+### Gemini CLI / OpenCode
+```json
+{
+  "mcpServers": {
+    "notebooklm": {
+        "command": "python",
+        "args": ["-m", "mcp_notebooklm"],
+        "env": {
+          "MCP_NOTEBOOKLM_LOG_LEVEL": "INFO"
+        }
+    }
+  }
+}
 ```
-This will open a Chrome window. Log in to your Google account, then close the window. The session is saved locally.
-
----
-
-## 🧪 Testing the Server
-
-```bash
-# Basic health check
-python tests/test_basic.py
-
-# Verify imports
-python -c "from mcp_notebooklm import mcp; print('✅ OK:', mcp.name)"
-```
-
----
-
-## 🔧 Maintenance
-
-### Updating the Package
-
-If you installed via git:
-
-```bash
-cd mcp-NotebookLLM
-git pull
-pip install -e .
-```
-
----
-
-## 📊 Feature Highlights
-
-| Feature | Description |
-|---------|-------------|
-| **Auto-Discovery** | No need to paste URLs. `list_notebooks` finds them all. |
-| **Multi-Profile** | Support for multiple Google accounts with isolation. |
-| **Full RAG** | Chat, Cite, and Retrieve source content. |
-| **Content Factory** | Generate Audio, Video, Briefings, Slides, and more. |
