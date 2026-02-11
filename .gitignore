@@ -24,6 +24,7 @@ wheels/
 MANIFEST
 
 # ----- Virtual Environments -----
+# Don't include venvs in repo (should be created locally)
 venv/
 .venv/
 env/
@@ -61,8 +62,17 @@ logs/
 
 # ----- Internal Documentation (Dev Only) -----
 docs/internal/
+TEST_JOURNAL.md
+TEST_REPORT.md
+session-*.md
+
+# ----- Local Configuration -----
+# These contain hardcoded local paths
+opencode-config.json
+mcp-config-example.json
 
 # ----- Playwright & Browser Data -----
+# Never include browser profiles
 playwright-report/
 playwright/.cache/
 *.pw.zip
