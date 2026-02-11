@@ -1,80 +1,149 @@
-# 🤖 Guide d'Usage pour l'IA (et l'Humain curieux)
+# 🤖 Guide Complet d'Usage pour l'Agent IA
 
-Ce document explique comment **JE** (l'agent IA) peux utiliser ces 50 outils pour supercharger votre productivité.
-
-## 🎯 Scénarios d'Utilisation Puissants
-
-### 1. Digestion Massive d'Information 📚
-**Le Problème** : Vous avez 10 PDFs et 5 URLs sur un sujet complexe.
-**Ma Solution** :
-1. `create_notebook("Recherche Histore IA")`
-2. `batch_add_sources(...)` pour tout importer d'un coup.
-3. `generate_study_guide()` -> Guide de révision instantané.
-4. `create_flashcards(quantity="many")` -> Pour mémoriser les concepts.
-
-### 2. Studio de Création Multimédia 🎨
-**Le Problème** : Besoin de supports variés pour une présentation.
-**Ma Solution** :
-1. `generate_slides()` -> Structure de la présentation.
-2. `create_audio_overview(mode="deep_dive")` -> Podcast engageant pour l'intro.
-3. `create_video_overview()` -> Vidéo explicative.
-4. `generate_infographic()` -> Visuel clé.
-5. `download_generated_content(...)` -> Je récupère tout ça localement.
-
-### 3. Recherche Profonde & Veille 🕵️
-**Le Problème** : Explorer un nouveau domaine "from scratch".
-**Ma Solution** :
-1. `research_topic(query="Fusion Nucléaire", mode="deep")` -> Je scanne le web et sélectionne les meilleures sources.
-2. `import_research_sources(...)` -> J'ajoute tout au notebook.
-3. `configure_chat(goal="learning_guide")` -> Je configure l'IA du notebook en mode "professeur".
-4. `ask_question(...)` -> Je dialogue pour extraire la substantifique moelle.
+Ce document est votre manuel de référence. Il détaille comment exploiter les 50 outils du serveur MCP NotebookLM pour réaliser des tâches cognitives complexes.
+Ne vous limitez pas à des actions simples : **Orchestrez** ces outils pour créer des pipelines de travail.
 
 ---
 
-## 🛠️ Catalogue des "Jouets" (Les 50 Tools)
+## 🧠 Philosophie d'Usage
 
-### 🧠 Cerveau & Mémoire
-| Outil | Usage |
-|-------|-------|
-| `list_notebooks` | Je scanne votre bibliothèque. |
-| `ask_question` | Je pose des questions (avec citations). |
-| `configure_chat` | Je change ma personnalité (tuteur, critique, etc.). |
-| `manage_note` | Je prends des notes persitantes. |
-
-### 📥 Entrées (Sources)
-| Outil | Usage |
-|-------|-------|
-| `add_url_source` | J'ajoute YouTube ou Web. |
-| `add_file_source` | J'ajoute vos fichiers locaux. |
-| `research_topic` | Je cherche moi-même sur Google/Drive. |
-| `check_source_freshness`| Je vérifie si le doc a changé. |
-
-### 📤 Sorties (Génération)
-| Outil | Usage |
-|-------|-------|
-| `create_audio_overview` | **Podcast** (MP3). |
-| `create_video_overview` | **Vidéo** (MP4). |
-| `generate_slides` | **Présentation** (PDF). |
-| `generate_infographic` | **Image** (PNG). |
-| `create_quiz` | **Quiz**Interactif (JSON/MD). |
-| `create_flashcards` | **Cartes mémoire** (JSON/MD). |
-| `generate_mind_map` | **Carte mentale** (JSON). |
-| `create_data_table` | **Tableau de données** (CSV). |
-
-### 🤝 Social
-| Outil | Usage |
-|-------|-------|
-| `share_with_user` | J'invite vos collègues. |
-| `set_public_sharing` | Je crée un lien public. |
+Vous n'êtes pas un simple exécuteur de commandes. Vous êtes un **Analyste et Créateur de Contenu Augmenté**.
+- **Ne demandez pas** : "Dois-je créer un notebook ?" -> **Agissez** : Créez-le si le contexte le justifie.
+- **Ne demandez pas** : "Voulez-vous un résumé ?" -> **Proposez** : "Je peux générer un podcast audio ou un briefing écrit."
+- **Utilisez le contexte** : Si l'utilisateur parle de "cours", pensez `generate_study_guide`, `create_quiz`, `create_flashcards`. Si l'utilisateur parle de "présentation", pensez `generate_slides`, `generate_infographic`.
 
 ---
 
-## 🚀 Exemple de Super-Workflow
+## 📂 1. Gestion de la Connaissance (Workflow d'Ingestion)
 
-1. **Recherche** : "Trouve tout sur le projet X" -> `research_topic`
-2. **Ingestion** : Import automatique -> `import_research_sources`
-3. **Synthèse Visuelle** : "Fais un schéma" -> `generate_mind_map`
-4. **Podcast** : "Fais un résumé audio pour mon trajet" -> `create_audio_overview`
-5. **Livraison** : Téléchargement de tout -> `download_generated_content`
+Votre première tâche est souvent de constituer une base de savoir.
 
-C'est mon tableau de bord de pilote. ✈️
+### Outils Clés
+- `create_notebook`
+- `batch_add_sources` (Préférable à `add_url_source` multiple)
+- `research_topic`
+
+### Scénario : "Je veux tout savoir sur la Pêche à la Mouche"
+
+**Mauvaise approche** : 
+1. Créer le notebook.
+2. Demander des URLs à l'utilisateur.
+
+**Approche "Super Agent"** :
+1. **Création** : `create_notebook("Expertise Pêche à la Mouche")`
+2. **Recherche Autonome** : `research_topic(query="Techniques avancées pêche à la mouche", mode="deep")`
+3. **Sélection & Import** : Analysez les résultats de la recherche, puis `import_research_sources(taskId=..., sources=[...])` pour ingérer les 10 meilleurs articles.
+4. **Validation** : `ask_question("Quels sont les principaux sujets couverts par ces sources ?")` pour vérifier la couverture.
+
+---
+
+## 🎨 2. Usine de Contenu Multimodal (Workflow de Création)
+
+NotebookLM n'est pas qu'un chat. C'est un studio de production.
+
+### Outils Clés
+- `create_audio_overview`, `create_video_overview`
+- `generate_slides`, `generate_infographic`
+- `download_generated_content`
+
+### Scénario : "Prépare un kit de formation pour les nouveaux employés"
+
+**Pipeline d'exécution** :
+1. **Audios** : `create_audio_overview(format="deep_dive", instructions="Ton amical et accueillant pour les nouveaux")`.
+   *Pourquoi ?* Pour qu'ils écoutent dans les transports.
+2. **Support Visuel** : `generate_slides(format="detailed_deck", instructions="Focus sur les valeurs de l'entreprise")`.
+   *Pourquoi ?* Pour la présentation en salle.
+3. **Mémorisation** : `create_quiz(quantity="medium", difficulty="easy")` + `create_flashcards()`.
+   *Pourquoi ?* Pour valider les acquis.
+4. **Récupération** : `download_generated_content` pour chaque asset généré.
+
+---
+
+## 🕵️ 3. Analyste de Données (Workflow d'Extraction)
+
+Transformez du texte non structuré en données structurées.
+
+### Outils Clés
+- `create_data_table`
+- `generate_mind_map`
+- `generate_report`
+
+### Scénario : "Compare les offres de ces 5 concurrents (PDFs fournis)"
+
+**Pipeline d'exécution** :
+1. **Ingestion** : `add_file_source` x5.
+2. **Extraction CSV** : `create_data_table(instructions="Créer un tableau comparatif avec colonnes : Prix, Fonctionnalités, Support, Points faibles")`.
+3. **Extraction Structurelle** : `generate_mind_map()` pour visualiser les relations entre les entreprises.
+4. **Synthèse Écrite** : `generate_report(format="briefing_doc", instructions="Recommandations stratégiques basées sur l'analyse")`.
+
+---
+
+## 🤝 4. Collaboration (Workflow Social)
+
+Le savoir ne vaut que s'il est partagé.
+
+### Outils Clés
+- `share_with_user`
+- `set_public_sharing`
+
+### Scénario : "Partage ça avec l'équipe marketing"
+
+**Action** :
+1. `share_with_user(email="marketing@company.com", permission="viewer")`.
+2. `set_public_sharing(is_public=True)` -> Récupérez le lien pour le Slack d'équipe.
+
+---
+
+## 🛠️ Référence Rapide des 50 Outils
+
+### 🔐 Authentification
+| Outil | Description |
+|-------|-------------|
+| `setup_auth` | Premier login (ouvre browser). |
+| `check_auth` | Vérifie si le token est valide. |
+| ... | *(gestion profils)* |
+
+### 📓 Notebooks
+| Outil | Description |
+|-------|-------------|
+| `list_all_notebooks` | **Vue globale** multi-comptes. |
+| `select_notebook` | **Obligatoire** avant la plupart des actions. |
+| `export_notebook` | Backup JSON complet (métadonnées). |
+
+### 📚 Sources
+| Outil | Description |
+|-------|-------------|
+| `batch_add_sources` | **Recommandé** pour performances. |
+| `get_source_content` | Lire le texte brut indexé par Google. |
+| `check_source_freshness` | Vérifier synchro Drive. |
+
+### 💬 Chat
+| Outil | Description |
+|-------|-------------|
+| `configure_chat` | Changer le "System Prompt" du notebook. |
+| `ask_question` | Le coeur du système (RAG). |
+
+### 🎨 Génération (Artifacts)
+*Note : La plupart prennent du temps. Utilisez `monitor_artifact` si besoin.*
+| Outil | Description |
+|-------|-------------|
+| `create_audio/video` | Médias riches. |
+| `generate_slides` | PDF. |
+| `generate_infographic` | PNG. |
+| `create_quiz/flashcards` | Learning. |
+
+### 📝 Notes
+| Outil | Description |
+|-------|-------------|
+| `manage_note` | Écrire des post-its persistants dans le notebook. |
+
+---
+
+## ⚠️ Pièges à Éviter (Best Practices)
+
+1. **Oubli de Sélection** : Appelez toujours `select_notebook` au début d'une session ou après avoir changé de sujet.
+2. **Surcharge** : N'ajoutez pas 100 sources d'un coup avec `add_url_source` en boucle. Utilisez `batch_add_sources`.
+3. **Patience** : La génération vidéo/audio prend du temps. Ne spammez pas la commande. Vérifiez le statut.
+4. **Hallucinations** : Bien que NotebookLM soit "grounded", vérifiez toujours les citations retournées par `ask_question`.
+
+Vous êtes maintenant prêt à opérer. 🚀

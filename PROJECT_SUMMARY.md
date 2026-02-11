@@ -1,83 +1,160 @@
-# 🎉 MCP NotebookLM - Project Summary
+# 📘 MCP NotebookLM - Project Bible & Summary
 
-## ✅ Status: Production Ready (v1.0.1)
+> **Version**: 1.0.1 (Production Ready)
+> **Status**: Stable / Maintained
+> **Core Library**: `notebooklm-py` (Fork: Tatine13)
 
-A fully-featured MCP (Model Context Protocol) server for Google NotebookLM, utilizing a maintained fork of `notebooklm-py` to ensure reliable operation.
-
----
-
-## 📊 Final Statistics
-
-| Metric | Value |
-|--------|-------|
-| **MCP Tools Exposed** | **50** (Autonomy Level: High) |
-| **Library Base** | `Tatine13/notebooklm-py` (Forked for stability) |
-| **Authentication** | Multi-Profile + Persistent Auth |
-| **Capabilities** | Research, Chat, Content Gen, Note Management, Sharing |
-| **Project Size** | ~350KB |
+A comprehensive, production-grade MCP server for Google NotebookLM, exposing **50+ tools** to AI agents. This project bridges the gap between LLMs (Claude, models via OpenRouter) and your personal knowledge base in NotebookLM.
 
 ---
 
-## 🛠️ MCP Tools (50 Total)
+## 🏗️ Architecture & Technology Stack
 
-### 🔐 Auth & Profiles (8)
-- `setup_auth`, `check_auth`, `confirm_auth`
-- `create_profile`, `switch_profile`, `list_profiles`, `get_current_profile`, `delete_profile`, `update_profile`
+### Core Components
+1.  **FastMCP Server** (`server.py`): The main entry point, handling request routing, tool execution, and lifecycle management.
+2.  **Client Wrapper** (`client.py`): A robust wrapper around the `notebooklm-py` library, handling authentication persistence and session management.
+3.  **Library Fork** (`notebooklm-py` @ Tatine13): A maintained fork of the reverse-engineered API, patching critical bugs in source addition (RPC parameter alignment) and artifact generation.
+4.  **Playwright Runtime**: Utilizes the existing Oracle ecosystem's Playwright browsers (Chromium) to handle Google authentication and complex web interactions.
+
+### Directory Structure
+```
+mcp-NotebookLLM/
+├── src/mcp_notebooklm/
+│   ├── server.py            # Main MCP Server definition
+│   ├── client.py            # Client Wrapper & Auth Manager
+│   ├── contracts.py         # Pydantic models & data structures
+│   └── tools/               # Modular Tool Implementations
+│       ├── auth.py          # Authentication tools
+│       ├── notebooks.py     # Notebook CRUD & discovery
+│       ├── sources.py       # Source management (URL, File, Drive)
+│       ├── chat.py          # Chat & History
+│       ├── artifacts.py     # Generation (Audio, Video, Quiz...)
+│       ├── research_tools.py# Deep Research integration
+│       ├── sharing.py       # Collaboration features
+│       └── profiles.py      # Multi-profile management
+├── config/                  # Configuration files
+├── tests/                   # Extensive test suite
+└── logs/                    # Runtime logs
+```
+
+---
+
+## 🛠️ Complete Tool Catalog (50 Tools)
+
+### 🔐 Authentication & Profiles (8)
+*Tools to manage identity and session isolation. Essential for multi-account usage.*
+- `setup_auth`: Interactive login flow (opens browser).
+- `check_auth`: Verifies if the current session is valid.
+- `confirm_auth`: Finalizes the login process after browser interaction.
+- `create_profile`: Creates a separated storage constraint (new account).
+- `switch_profile`: Hot-swaps the active user profile.
+- `list_profiles`: Shows all available profiles.
+- `get_current_profile`: Returns metadata of the active session.
+- `update_profile`: Updates profile metadata (name, description).
 
 ### 📓 Notebook Management (10)
-- `list_notebooks` (**Auto-Discovery**), `list_all_notebooks` (Unified), `search_notebooks`
-- `select_notebook`, `create_notebook`, `delete_notebook`, `rename_notebook`
-- `get_notebook_info`, `get_current_notebook`, `export_notebook`
+*Lifecycle management of notebooks. No manual URLs required.*
+- `list_notebooks`: **Auto-discovery** of all notebooks in the account.
+- `list_all_notebooks`: Aggregated view across ALL profiles.
+- `search_notebooks`: Semantic/Keyword search in notebook titles.
+- `select_notebook`: Sets the "Active Context" for subsequent commands.
+- `create_notebook`: Instantiates a new empty notebook.
+- `rename_notebook`: Renames an existing notebook.
+- `delete_notebook`: Permanently removes a notebook.
+- `get_notebook_info`: detailed metadata (source count, date, etc.).
+- `get_current_notebook`: Returns the currently active notebook context.
+- `export_notebook`: Dumps all metadata and source list to JSON.
 
 ### 📚 Source Management (12)
-- `list_notebook_sources`, `list_drive_sources` (with freshness check)
-- `add_url_source` (Web/YouTube), `add_file_source` (PDF/Txt/etc), `batch_add_sources`
-- `refresh_source`, `check_source_freshness`
-- `rename_source`, `remove_source`
-- `download_all_sources`
-- `get_source_guide` (AI Summary), `get_source_content` (Indexed Text)
+*Ingestion and management of knowledge sources. The "R" in RAG.*
+- `add_url_source`: Ingests Web pages or YouTube videos (transcript).
+- `add_file_source`: Uploads local files (PDF, TXT, MD, MP3...).
+- `batch_add_sources`: Optimized bulk ingestion of multiple mixed sources.
+- `list_notebook_sources`: Metadata of all sources in a notebook.
+- `list_drive_sources`: Specific view for Google Drive linked sources.
+- `get_source_content`: **Retrieves full indexed text** of a source.
+- `get_source_guide`: Retrieves AI-generated summary & keywords.
+- `check_source_freshness`: Compares local/Drive version vs NotebookLM version.
+- `refresh_source`: Triggers a re-sync of a specific source.
+- `rename_source`: Renames a source citation title.
+- `remove_source`: Deletes a source from the notebook.
+- `download_all_sources`: Backs up all source text content locally.
 
-### 🕵️ Research (2)
-- `research_topic` (Deep/Fast Web Search & Import)
-- `import_research_sources`
+### 🕵️ Research & Discovery (2)
+*Autonomous agents for information gathering.*
+- `research_topic`: Performs Deep or Fast web/drive research and returns references.
+- `import_research_sources`: Imports selected results from research directly into the notebook.
 
-### 💬 Chat & Q&A (3)
-- `ask_question` (Citations included), `get_conversation_history`, `configure_chat`
+### 💬 Chat & Analysis (3)
+*Direct interaction with the Language Model.*
+- `ask_question`: Sends a prompt to the notebook. Returns Answer + Citations.
+- `configure_chat`: Sets system persona (e.g., "Critical Critic", "Tutor").
+- `get_conversation_history`: Retrieves past turns of the chat session.
 
-### 🎨 Content Generation & Artifacts (11)
-- **Audio**: `create_audio_overview` (Podcasts)
-- **Video**: `create_video_overview`
-- **Visuals**: `generate_infographic`, `generate_mind_map`, `generate_slides`
-- **Study**: `create_quiz`, `create_flashcards`, `generate_study_guide`
-- **Text**: `generate_report`, `create_data_table`
-- **Management**: `download_generated_content`, `list_notebook_artifacts`, `delete_notebook_artifact`, `monitor_artifact`
+### 🎨 Content Generation (Artifacts) (10)
+*Transforming knowledge into new formats.*
+- `create_audio_overview`: Generates Podcasts (Deep Dive, Brief, etc.).
+- `create_video_overview`: Generates AI Videos with avatars.
+- `generate_slides`: Creates Presentation Decks (PDF).
+- `generate_infographic`: Creates Visual Summaries (PNG).
+- `generate_mind_map`: Creates conceptual Mind Maps (JSON).
+- `generate_study_guide`: Creates Review Guides / Cheat Sheets.
+- `create_quiz`: Generates interactive Quizzes (JSON/MD).
+- `create_flashcards`: Generates Study Cards (JSON/MD).
+- `generate_report`: Generates comprehensive text reports/blog posts.
+- `create_data_table`: Extracts structured data (CSV).
 
-### 🤝 Sharing & Notes (4+1)
-- `share_with_user`, `remove_share`, `get_share_status`, `set_public_sharing`
-- `manage_note` (CRUD)
+### 🔧 Artifact Management (4)
+- `list_notebook_artifacts`: Shows all generated assets in a notebook.
+- `download_generated_content`: Downloads artifacts (MP3, MP4, PDF, etc.).
+- `monitor_artifact`: Tracks generation progress (polling).
+- `delete_notebook_artifact`: Removes a generated asset.
+
+### 🤝 Collaboration & Notes (5)
+- `share_with_user`: Invites email addresses (Viewer/Editor).
+- `remove_share`: Revokes access.
+- `get_share_status`: Audits permissions and public link status.
+- `set_public_sharing`: Toggles "Anyone with link" access.
+- `manage_note`: CRUD for sticky notes within the notebook.
 
 ---
 
-## 🚀 Key Differentiators
+## ⚙️ Configuration & Environment
 
-| Feature | Standard MCPs | **Oracle MCP NotebookLM** |
-|---------|---------------|---------------------------|
-| **Source Fixes** | Broken on official lib | ✅ **Fixed via Fork** |
-| **Tools Count** | ~5-10 | ✅ **50 Tools** |
-| **Notebook Discovery** | Manual URLs | ✅ **Automatic** |
-| **Multi-Profile** | No | ✅ **Full Isolation** |
-| **Content Gen** | Chat only | ✅ **Full Suite (Video/Audio/Quiz)** |
+### Environment Variables
+| Variable | Description | Required | Default |
+|----------|-------------|:--------:|---------|
+| `PLAYWRIGHT_BROWSERS_PATH` | Path to Playwright browsers | ✅ | (System path) |
+| `NOTEBOOKLM_HEADLESS` | Run browser in background | ❌ | `true` |
+| `NOTEBOOKLM_TIMEOUT` | Global operation timeout | ❌ | `60` (seconds) |
+| `MCP_NOTEBOOKLM_LOG_LEVEL` | Logging verbosity | ❌ | `INFO` |
+
+### Caching System
+The system implements a **File-Based Cache** (`~/.cache/mcp-notebooklm/`) to reduce latency:
+- **Notebook Lists**: Cached for 5 minutes.
+- **Source Lists**: Cached for 1 minute.
+- **Artifacts**: Cached until explicit refresh.
+*To force refresh, most list tools accept a `refresh=True` parameter.*
+
+### Retry & Resilience
+- **Smart Retries**: Network flakiness is handled with exponential backoff (3 retries).
+- **Circuit Breaker**: If authentication fails repeatedly, the system fails fast to prevent account locking.
+- **Human-in-the-loop**: Auth flows degrade gracefully to interactive mode if tokens expire.
 
 ---
 
-## 🏗️ Architecture
+## 🔄 Development Workflow
 
-- **Server**: FastMCP v2
-- **Library**: `notebooklm-py` (@Tatine13 fork)
-- **Runtime**: Python 3.11+ (Decentralized venv)
-- **Browser**: Playwright (Oracle Ecosystem Integration)
+### Contributing
+This project relies on a **Fork** of `notebooklm-py`.
+- **Do not** submit PRs regarding source-add fixes to this repo if they belong in the library.
+- See `CONTRIBUTING.md` for the workflow to submit upstream fixes.
 
-## 🔗 Links
-
-- **Repository**: [Tatine13/mcp-notebooklm](https://github.com/Tatine13/mcp-notebooklm)
-- **Library Fork**: [Tatine13/notebooklm-py](https://github.com/Tatine13/notebooklm-py)
+### Testing
+Run the full suite using `pytest`:
+```bash
+# Activation
+source /mnt/windows/App_Wubuntu/python_envs/mcp-notebooklm/bin/activate
+# Run
+pytest tests/
+```
