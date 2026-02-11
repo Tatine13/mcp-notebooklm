@@ -1,20 +1,21 @@
+# ... (pyproject.toml content as replaced above) ...
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "mcp-notebooklm"
-version = "1.0.0"
-description = "MCP server for Google NotebookLM with automatic notebook discovery and 50+ tools"
+version = "0.1.0"
+description = "MCP server for Google NotebookLM with automatic notebook discovery"
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.11"
 authors = [
     {name = "Esprit Artificiel", email = "dev@esprit-artificiel.com"}
 ]
-keywords = ["mcp", "notebooklm", "google", "ai", "rag", "llm", "notebook"]
+keywords = ["mcp", "notebooklm", "google", "ai", "rag"]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
@@ -24,7 +25,7 @@ classifiers = [
 ]
 dependencies = [
     "fastmcp>=2.0.0",
-    "notebooklm-py>=0.3.0",
+    "notebooklm-py @ git+https://github.com/Tatine13/notebooklm-py.git@main",
     "pydantic>=2.0.0",
     "pydantic-settings>=2.0.0",
     "python-dotenv>=1.0.0",
@@ -42,10 +43,13 @@ dev = [
     "mypy>=1.5.0",
 ]
 
+[project.scripts]
+mcp-notebooklm = "mcp_notebooklm.cli:main"
+
 [project.urls]
-Homepage = "https://github.com/Tatine13/mcp-notebooklm"
-Repository = "https://github.com/Tatine13/mcp-notebooklm"
-Issues = "https://github.com/Tatine13/mcp-notebooklm/issues"
+Homepage = "https://github.com/esprit-artificiel/mcp-notebooklm"
+Repository = "https://github.com/esprit-artificiel/mcp-notebooklm"
+Issues = "https://github.com/esprit-artificiel/mcp-notebooklm/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]
